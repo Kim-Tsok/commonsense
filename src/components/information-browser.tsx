@@ -25,12 +25,18 @@ import {
   type Information,
 } from "@/lib/information";
 
-function ReviewBars({ level }: { level: number }) {
+function ReviewBars({
+  level,
+  example = false,
+}: {
+  level: number;
+  example?: boolean;
+}) {
   return (
     <span
       className="review-bars"
       role="img"
-      aria-label={`Example review level ${level} of 4: ${reviewLevels[level - 1]}`}
+      aria-label={`${example ? "Example review" : "Review"} level ${level} of 4: ${reviewLevels[level - 1]}`}
     >
       {[1, 2, 3, 4].map((n) => (
         <span key={n} className={n <= level ? "filled" : ""} />
@@ -81,8 +87,10 @@ function Modal({
 
 export function InformationBrowser({
   information,
+  prototype = true,
 }: {
   information: Information[];
+  prototype?: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category>("All info");
@@ -198,8 +206,8 @@ export function InformationBrowser({
             </h2>
             <p>
               {query || category !== "All info"
-                ? `${visible.length} sample ${visible.length === 1 ? "guide" : "guides"}`
-                : `${visible.length} sample guides for life in Nigeria`}
+                ? `${visible.length} ${prototype ? "sample " : ""}${visible.length === 1 ? "guide" : "guides"}`
+                : `${visible.length} ${prototype ? "sample " : ""}guides for life in Nigeria`}
             </p>
           </div>
           <label className="sort-label">
@@ -211,12 +219,15 @@ export function InformationBrowser({
             <ChevronDown size={18} strokeWidth={1.5} aria-hidden="true" />
           </label>
         </div>
-        <div className="prototype-note">
-          <Info size={18} strokeWidth={1.5} aria-hidden="true" />
-          <span>
-            Prototype: sample content and review levels. Not verified guidance.
-          </span>
-        </div>
+        {prototype && (
+          <div className="prototype-note">
+            <Info size={18} strokeWidth={1.5} aria-hidden="true" />
+            <span>
+              Prototype: sample content and review levels. Not verified
+              guidance.
+            </span>
+          </div>
+        )}
         <div className="card-grid" aria-live="polite">
           {visible.map((item) => (
             <article className="info-card" key={item.id}>
@@ -230,8 +241,10 @@ export function InformationBrowser({
                   className="review-button"
                   onClick={() => setModal("reviews")}
                 >
-                  <ReviewBars level={item.level} />
-                  <span>{item.level}/4 · Example</span>
+                  <ReviewBars level={item.level} example={prototype} />
+                  <span>
+                    {item.level}/4{prototype ? " · Example" : " reviewed"}
+                  </span>
                 </button>
                 <button
                   className="read-button"
@@ -252,7 +265,7 @@ export function InformationBrowser({
           <div className="empty-state">
             <Search size={18} strokeWidth={1.5} aria-hidden="true" />
             <h3>No matching information yet.</h3>
-            <p>Try a different word or browse all the sample guides.</p>
+            <p>Try a different word or browse all the guides.</p>
             <button
               className="button"
               onClick={() => {
@@ -293,14 +306,39 @@ export function InformationBrowser({
       {selected && (
         <Modal title={selected.title} onClose={() => setSelected(null)}>
           <span className="detail-category">{selected.category} · Nigeria</span>
-          <p className="sample-label">Sample guide · Not yet reviewed</p>
+          <p className="sample-label">
+            {prototype
+              ? "Sample guide · Not yet reviewed"
+              : `Checked ${selected.checkedAt?.slice(0, 10) ?? ""}`}
+          </p>
           <p className="detail-body">{selected.body}</p>
           <div className="source-placeholder">
-            <h3>Sources will appear here</h3>
-            <p>
-              Published guides will include original sources, a review date, and
-              a way to suggest a correction.
-            </p>
+            <h3>
+              {selected.sources?.length
+                ? "Sources"
+                : "Sources will appear here"}
+            </h3>
+            {selected.sources?.length ? (
+              <ul>
+                {selected.sources.map((source) => (
+                  <li key={source.url}>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {source.title}
+                    </a>
+                    <p>{source.publisher}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                Published guides will include original sources and a review
+                date.
+              </p>
+            )}
           </div>
           <button className="button" onClick={() => setSelected(null)}>
             Back to information
@@ -318,9 +356,11 @@ export function InformationBrowser({
             We're starting with help and support, health, everyday life, online
             safety, and public announcements in plain English.
           </p>
-          <p className="sample-label">
-            This first version is an interface prototype with sample content.
-          </p>
+          {prototype && (
+            <p className="sample-label">
+              This first version is an interface prototype with sample content.
+            </p>
+          )}
         </Modal>
       )}
       {modal === "reviews" && (
@@ -340,10 +380,12 @@ export function InformationBrowser({
               </div>
             ))}
           </div>
-          <p className="sample-label">
-            These levels are a proposed system. All bars in this prototype are
-            illustrative.
-          </p>
+          {prototype && (
+            <p className="sample-label">
+              These levels are a proposed system. All bars in this prototype are
+              illustrative.
+            </p>
+          )}
         </Modal>
       )}
       {modal === "add" && (

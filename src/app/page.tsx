@@ -1,8 +1,11 @@
 import { Compass } from "lucide-react";
 import { InformationBrowser } from "@/components/information-browser";
-import { information } from "@/lib/information";
+import { getInformation } from "@/lib/content";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const information = await getInformation();
   return (
     <>
       <a className="skip-link" href="#main">
@@ -23,7 +26,10 @@ export default function Home() {
         </div>
       </header>
       <main id="main" className="container">
-        <InformationBrowser information={information} />
+        <InformationBrowser
+          information={information}
+          prototype={process.env.CONTENT_MODE === "prototype"}
+        />
       </main>
       <footer className="site-footer container">
         <a className="footer-brand" href="/">

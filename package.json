@@ -3,21 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname 0.0.0.0",
+    "dev": "node scripts/next.mjs dev --hostname 0.0.0.0",
     "build": "next build",
-    "start": "next start --hostname 0.0.0.0",
-    "typecheck": "tsc --noEmit"
+    "start": "node scripts/next.mjs start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "donta:generate": "drizzle-kit generate --config=donta.config.ts",
+    "donta:migrate": "drizzle-kit migrate --config=donta.config.ts",
+    "donta:studio": "drizzle-kit studio --config=donta.config.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:verify": "tsx scripts/verify-db.ts",
+    "db:setup": "npm run donta:migrate && npm run db:seed && npm run db:verify",
+    "test:backend": "tsx --test tests/backend.test.ts"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@neondatabase/serverless": "^1.2.0",
+    "better-auth": "^1.7.7",
+    "donta": "file:./vendor/donta",
+    "drizzle-orm": "^0.45.3",
+    "lucide-react": "^0.468.0",
     "next": "16.3.8",
+    "pg": "^8.23.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "lucide-react": "^0.468.0"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "typescript": "^5.9.0",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
   }
 }

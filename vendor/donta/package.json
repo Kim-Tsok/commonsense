@@ -1,0 +1,72 @@
+{
+  "name": "donta",
+  "version": "0.1.0",
+  "description": "Postgres and auth for Next.js. Create a project or add donta to an existing app.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./db": {
+      "types": "./dist/db.d.mts",
+      "default": "./dist/db.mjs"
+    },
+    "./env": {
+      "types": "./dist/env.d.mts",
+      "default": "./dist/env.mjs"
+    },
+    "./load-env": {
+      "types": "./dist/load-env.d.mts",
+      "default": "./dist/load-env.mjs"
+    },
+    "./drizzle-config": {
+      "types": "./dist/drizzle-config.d.mts",
+      "default": "./dist/drizzle-config.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
+  "peerDependencies": {
+    "@electric-sql/pglite": ">=0.5",
+    "@neondatabase/serverless": ">=1",
+    "drizzle-kit": ">=0.31",
+    "drizzle-orm": ">=0.45"
+  },
+  "peerDependenciesMeta": {
+    "@electric-sql/pglite": {
+      "optional": true
+    },
+    "drizzle-kit": {
+      "optional": true
+    },
+    "@neondatabase/serverless": {
+      "optional": true
+    },
+    "drizzle-orm": {
+      "optional": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kim-Tsok/donta.git",
+    "directory": "packages/donta"
+  },
+  "homepage": "https://github.com/Kim-Tsok/donta#readme",
+  "bugs": {
+    "url": "https://github.com/Kim-Tsok/donta/issues"
+  },
+  "keywords": [
+    "nextjs",
+    "postgres",
+    "drizzle",
+    "better-auth",
+    "cli",
+    "starter"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

@@ -15,6 +15,8 @@ export type Information = {
   body: string;
   level: 1 | 2 | 3 | 4;
   keywords: string[];
+  sources?: { url: string; title: string; publisher: string }[];
+  checkedAt?: string;
 };
 
 // Interface fixtures only. Review levels illustrate the UI, not verified claims.

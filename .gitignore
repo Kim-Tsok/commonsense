@@ -4,3 +4,8 @@ out/
 *.tsbuildinfo
 .env*
 !.env.example
+
+# donta local state and secrets
+.env.local
+.env*.local
+.donta/
